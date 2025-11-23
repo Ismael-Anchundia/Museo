@@ -1,4 +1,4 @@
-// script.js — Sonrisa REAL (con doble condición + tiempo extendido)
+// script.js — Sonrisa REAL + mensaje + chatbot flotante
 
 console.log("script.js cargado ✔");
 
@@ -11,20 +11,31 @@ const video = document.getElementById("webcam");
 const feedback = document.getElementById("feedback-gesto");
 const chatbotStatus = document.getElementById("chatbot-status");
 const chatbotSection = document.getElementById("chatbot");
-const chatbotContenedor = document.getElementById("chatbot-contenedor");
+const chatbotFlotante = document.getElementById("chatbot-flotante");
+const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
 
 let faceLandmarker;
 let desbloqueado = false;
 
-// Mucho más estricto
-const SONRISA_RATIO_UMBRAL = 3.2;      // boca muy ancha
-const LABIOS_SEPARADOS = 0.018;        // labios realmente abiertos
-const SONRISA_TIEMPO_MIN = 650;        // 0.65s sostenido
-const ESTABILIDAD_CARA_MIN = 400;      // 0.4s antes de analizar
+// Parámetros super estrictos
+const SONRISA_RATIO_UMBRAL = 3.2;
+const LABIOS_SEPARADOS = 0.018;
+const SONRISA_TIEMPO_MIN = 650;
+const ESTABILIDAD_CARA_MIN = 400;
 
 let sonrisaInicio = null;
 let caraDetectadaInicio = null;
 
+// =========================================================
+// Mostrar mensaje emergente
+// =========================================================
+function mostrarMensajeSonrisa() {
+  mensajeSonrisa.classList.add("activo");
+
+  setTimeout(() => {
+    mensajeSonrisa.classList.remove("activo");
+  }, 1800);
+}
 
 // =========================================================
 // DESBLOQUEAR
@@ -33,28 +44,36 @@ function desbloquear(motivo) {
   if (desbloqueado) return;
   desbloqueado = true;
 
-  chatbotSection.classList.add("desbloqueado");
+  // Mostrar mensaje visual
+  mostrarMensajeSonrisa();
 
-  chatbotStatus.innerHTML = `
-    <h3>¡Guía Desbloqueada!</h3>
-    <p>Has activado el chatbot con: <b>${motivo}</b>.</p>
-  `;
+  // Apagar cámara
+  if (video.srcObject) {
+    video.srcObject.getTracks().forEach(track => track.stop());
+  }
 
-  feedback.textContent = `🎉 Activado por ${motivo}`;
+  // Ocultar sección de cámara
+  const trackingSection = document.getElementById("tracking");
+  trackingSection.style.display = "none";
 
-  chatbotContenedor.style.display = "block";
-  chatbotContenedor.innerHTML = `
+  // 👉 OCULTAR SECCIÓN COMPLETA DEL CHATBOT
+  const chatbotSectionDOM = document.getElementById("chatbot");
+  chatbotSectionDOM.style.display = "none";
+
+  // Mostrar chatbot flotante
+  chatbotFlotante.style.display = "block";
+
+  chatbotFlotante.innerHTML = `
     <iframe
       src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/07/21/20251107212257-N8IQVOHQ.json"
-      style="width:100%; height:520px; border:none; border-radius:12px;"
-      title="Chatbot"
-    ></iframe>
+      title="Chatbot">
+    </iframe>
   `;
 }
 
 
 // =========================================================
-// DETECTAR SONRISA REAL (doble condición)
+// DETECTAR SONRISA REAL
 // =========================================================
 function detectarSonrisaReal(face) {
   const left = face[61];
@@ -68,13 +87,11 @@ function detectarSonrisaReal(face) {
 
   const separacionLabios = bottomLip.y - topLip.y;
 
-  // Debe cumplir AMBAS condiciones
   return (
     ratio > SONRISA_RATIO_UMBRAL &&
     separacionLabios > LABIOS_SEPARADOS
   );
 }
-
 
 // =========================================================
 // LOOP PRINCIPAL
@@ -95,7 +112,7 @@ function loop() {
 
     const face = faceRes.faceLandmarks[0];
 
-    // ===== 1. ESTABILIDAD DE DETECCIÓN =====
+    // 1. Estabilidad
     if (!caraDetectadaInicio) {
       caraDetectadaInicio = now;
       feedback.textContent = "Detectando rostro...";
@@ -109,7 +126,7 @@ function loop() {
       return;
     }
 
-    // ===== 2. DETECCIÓN DE SONRISA REAL =====
+    // 2. Sonrisa real
     const sonrisa = detectarSonrisaReal(face);
 
     if (!desbloqueado) {
@@ -142,7 +159,6 @@ function loop() {
 
   requestAnimationFrame(loop);
 }
-
 
 // =========================================================
 // INICIO
