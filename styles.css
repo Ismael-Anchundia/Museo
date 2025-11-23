@@ -1,106 +1,79 @@
+/* ======== ESTILOS GENERALES ======== */
+
 body {
     font-family: Arial, sans-serif;
+    background: #f4f4f4;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
 }
 
 header {
-    background-color: #007bff;
+    background: #007bff;
     color: white;
-    padding: 20px;
     text-align: center;
+    padding: 20px;
 }
 
 main {
-    padding: 20px;
     max-width: 1000px;
     margin: auto;
+    padding: 20px;
 }
 
 section {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 h2 {
-    color: #0056b3;
     border-bottom: 2px solid #007bff;
     padding-bottom: 5px;
-    margin-top: 0;
 }
 
-/* Estilos específicos para la sección de tracking */
-#tracking-facial {
-    text-align: center;
-}
+/* ======== VIDEO / CÁMARA ======== */
 
 #video-contenedor {
-    position: relative;
-    width: 100%;
-    max-width: 500px; 
-    margin: 10px auto;
-    /* 💡 CORRECCIÓN 1: Eliminamos el fondo gris para la presentación */
-    /* background-color: #ccc; */ 
-    border: 1px solid #999;
-    border-radius: 4px;
-    min-height: 350px; /* Altura mínima para mostrar el área */
+    display: flex;
+    justify-content: center;
 }
 
-/* 💡 CORRECCIÓN 2: Superponemos Video y Canvas */
-/* Esto hace que el canvas se dibuje exactamente encima del video, y el video */
-/* no se 'asome' por los bordes. */
-#video-contenedor video, 
-#video-contenedor canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+#webcam {
+    width: 640px;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 2px solid #333;
+    background: black;
 }
 
-#video-contenedor video {
-    /* El video debe estar debajo del canvas */
-    z-index: 1; 
+#feedback-gesto {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
-#canvas-output {
-    /* El canvas debe estar encima */
-    z-index: 2; 
-    display: block; /* Asegura el comportamiento de bloque para las dimensiones */
+/* ======== CHATBOT DESBLOQUEADO ======== */
+
+#chatbot.desbloqueado {
+    background: #e8ffe8;
+    border: 2px solid #27ae60;
+    box-shadow: 0 0 10px rgba(39,174,96,0.4);
 }
 
-/* Estilos para el botón de desbloqueo manual */
-#desbloquear-manual {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+/* ======== CHATBOT CONTENEDOR ======== */
+
+#chatbot-contenedor {
     margin-top: 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s;
 }
 
-#desbloquear-manual:hover {
-    background-color: #0056b3;
-}
-
+/* ======== FOOTER ======== */
 
 footer {
     text-align: center;
     padding: 10px;
-    background-color: #333;
+    background: #333;
     color: white;
-    /* 💡 CORRECCIÓN 3: Eliminamos 'position: fixed' para que no tape el contenido */
-    /* position: fixed; */
-    /* bottom: 0; */ 
-    width: 100%;
     margin-top: 20px;
 }

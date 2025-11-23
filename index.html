@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museo Virtual Interactivo</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <title>Museo Interactivo</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -14,31 +14,39 @@
     </header>
 
     <main>
-        <section id="museo">
-            <h2>Arte y Modelos 3D (Integrante 1)</h2>
-            <div id="contenedor-3d">
-                <p>Esperando la integración del modelo 3D de Sketchfab/QR del Integrante 1.</p>
-                </div>
+
+        <!-- INTEGRANTE 1 -->
+        <section id="modelos3d">
+        <h2>Arte y Modelos 3D (Integrante 1)</h2>
+
+        <iframe 
+            src="https://gualter302.github.io/HombreMaquina_web/" 
+            style="width: 100%; height: 600px; border: none; border-radius: 8px;">
+        </iframe>
         </section>
 
+
+        <!-- INTEGRANTE 2 (Chatbot) -->
         <section id="chatbot">
             <h2>🙋 Tu Guía Virtual (Integrante 2)</h2>
-            <div id="contenedor-chatbot">
-                <p id="chatbot-status">El Chatbot está esperando. Haz un guiño para desbloquear la guía especial.</p>
-                </div>
+
+            <p id="chatbot-status">
+                El Chatbot está bloqueado. Sonríe 😄 o muestra 👍 frente a la cámara.
+            </p>
+
+            <!-- Contenedor donde aparecerá el chatbot al desbloquear -->
+            <div id="chatbot-contenedor" style="display:none;"></div>
         </section>
 
-        <section id="tracking-facial">
-            <h2>📸 Activa tu Cámara</h2>
-            <p>Haz un guiño o gesto para desbloquear contenido especial.</p>
+        <!-- INTEGRANTE 3 (IA + Cámara) -->
+        <section id="tracking">
+            <h2>📸 Cámara y Gestos (Integrante 3)</h2>
+
             <div id="video-contenedor">
-                <video id="webcam" autoplay playsinline style="display:none;"></video>
-                <canvas id="canvas-output"></canvas>
+                <video id="webcam" autoplay playsinline></video>
             </div>
-            
-            <p id="feedback-gesto">Cargando módulos de detección...</p>
-            
-            <button id="desbloquear-manual">Desbloquear Contenido (Si el gesto falla)</button>
+
+            <p id="feedback-gesto">Cargando modelos IA...</p>
         </section>
 
     </main>
@@ -46,12 +54,8 @@
     <footer>
         <p>&copy; Proyecto Interactivo 2025</p>
     </footer>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 
-    <script src="script.js"></script>
-
+    <!-- IA (ESM) -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
