@@ -1,4 +1,4 @@
-// script.js — Sonrisa REAL + mensaje + chatbot flotante
+// script.js — Sonrisa REAL + chatbot flotante + burbuja minimizada
 
 console.log("script.js cargado ✔");
 
@@ -9,15 +9,21 @@ import {
 
 const video = document.getElementById("webcam");
 const feedback = document.getElementById("feedback-gesto");
-const chatbotStatus = document.getElementById("chatbot-status");
+
+const mensajeInicial = document.getElementById("mensaje-inicial");
 const chatbotSection = document.getElementById("chatbot");
+const trackingSection = document.getElementById("tracking");
+
 const chatbotFlotante = document.getElementById("chatbot-flotante");
 const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
+
+// Burbuja minimizada
+const chatbotBurbuja = document.getElementById("chatbot-burbuja");
 
 let faceLandmarker;
 let desbloqueado = false;
 
-// Parámetros super estrictos
+// Parámetros estrictos
 const SONRISA_RATIO_UMBRAL = 3.2;
 const LABIOS_SEPARADOS = 0.018;
 const SONRISA_TIEMPO_MIN = 650;
@@ -26,55 +32,63 @@ const ESTABILIDAD_CARA_MIN = 400;
 let sonrisaInicio = null;
 let caraDetectadaInicio = null;
 
-// =========================================================
-// Mostrar mensaje emergente
-// =========================================================
+// ============================
+// Mensaje emergente
+// ============================
 function mostrarMensajeSonrisa() {
   mensajeSonrisa.classList.add("activo");
-
-  setTimeout(() => {
-    mensajeSonrisa.classList.remove("activo");
-  }, 1800);
+  setTimeout(() => mensajeSonrisa.classList.remove("activo"), 1800);
 }
 
-// =========================================================
+// ============================
 // DESBLOQUEAR
-// =========================================================
-function desbloquear(motivo) {
+// ============================
+function desbloquear() {
   if (desbloqueado) return;
   desbloqueado = true;
 
-  // Mostrar mensaje visual
   mostrarMensajeSonrisa();
 
-  // Apagar cámara
+  // Apagar la cámara
   if (video.srcObject) {
-    video.srcObject.getTracks().forEach(track => track.stop());
+    video.srcObject.getTracks().forEach(t => t.stop());
   }
 
-  // Ocultar sección de cámara
-  const trackingSection = document.getElementById("tracking");
+  // Ocultar secciones completas
+  mensajeInicial.style.display = "none";
+  chatbotSection.style.display = "none";
   trackingSection.style.display = "none";
-
-  // 👉 OCULTAR SECCIÓN COMPLETA DEL CHATBOT
-  const chatbotSectionDOM = document.getElementById("chatbot");
-  chatbotSectionDOM.style.display = "none";
 
   // Mostrar chatbot flotante
   chatbotFlotante.style.display = "block";
 
   chatbotFlotante.innerHTML = `
+    <button id="boton-minimizar">–</button>
     <iframe
-      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/07/21/20251107212257-N8IQVOHQ.json"
+      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json"
       title="Chatbot">
     </iframe>
   `;
+
+  // Botón de minimizar
+  const botonMin = document.getElementById("boton-minimizar");
+  botonMin.onclick = () => {
+    chatbotFlotante.style.display = "none";
+    chatbotBurbuja.style.display = "flex";
+  };
 }
 
+// ============================
+// Restaurar chatbot desde burbuja
+// ============================
+chatbotBurbuja.onclick = () => {
+  chatbotBurbuja.style.display = "none";
+  chatbotFlotante.style.display = "block";
+};
 
-// =========================================================
-// DETECTAR SONRISA REAL
-// =========================================================
+// ============================
+// Detector de sonrisa real
+// ============================
 function detectarSonrisaReal(face) {
   const left = face[61];
   const right = face[291];
@@ -85,17 +99,13 @@ function detectarSonrisaReal(face) {
   const height = Math.abs(bottomLip.y - topLip.y);
   const ratio = width / height;
 
-  const separacionLabios = bottomLip.y - topLip.y;
-
-  return (
-    ratio > SONRISA_RATIO_UMBRAL &&
-    separacionLabios > LABIOS_SEPARADOS
-  );
+  return ratio > SONRISA_RATIO_UMBRAL &&
+         (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
-// =========================================================
+// ============================
 // LOOP PRINCIPAL
-// =========================================================
+// ============================
 function loop() {
   if (!video.videoWidth) {
     requestAnimationFrame(loop);
@@ -103,68 +113,48 @@ function loop() {
   }
 
   const now = performance.now();
-
   const faceRes = faceLandmarker.detectForVideo(video, now);
 
-  if (faceRes &&
-      faceRes.faceLandmarks &&
-      faceRes.faceLandmarks.length > 0) {
+  if (faceRes?.faceLandmarks?.[0]) {
 
     const face = faceRes.faceLandmarks[0];
 
-    // 1. Estabilidad
     if (!caraDetectadaInicio) {
       caraDetectadaInicio = now;
-      feedback.textContent = "Detectando rostro...";
-      requestAnimationFrame(loop);
-      return;
+      return requestAnimationFrame(loop);
     }
 
     if (now - caraDetectadaInicio < ESTABILIDAD_CARA_MIN) {
-      feedback.textContent = "Detectando rostro...";
-      requestAnimationFrame(loop);
-      return;
+      return requestAnimationFrame(loop);
     }
 
-    // 2. Sonrisa real
     const sonrisa = detectarSonrisaReal(face);
 
     if (!desbloqueado) {
       if (sonrisa) {
-        if (!sonrisaInicio) sonrisaInicio = now;
 
+        if (!sonrisaInicio) sonrisaInicio = now;
         const duracion = now - sonrisaInicio;
 
-        feedback.textContent =
-          `😊 Mantén la sonrisa... (${Math.round(duracion)} ms)`;
-
-        if (duracion >= SONRISA_TIEMPO_MIN) {
-          desbloquear("Sonrisa 😄");
-        }
+        if (duracion >= SONRISA_TIEMPO_MIN) desbloquear();
 
       } else {
         sonrisaInicio = null;
-        feedback.textContent = "Sonríe 😄 para desbloquear.";
       }
     }
 
   } else {
     caraDetectadaInicio = null;
     sonrisaInicio = null;
-
-    if (!desbloqueado) {
-      feedback.textContent = "Acércate a la cámara...";
-    }
   }
 
   requestAnimationFrame(loop);
 }
 
-// =========================================================
+// ============================
 // INICIO
-// =========================================================
+// ============================
 async function iniciar() {
-  feedback.textContent = "Cargando modelos IA...";
 
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
@@ -179,16 +169,15 @@ async function iniciar() {
     numFaces: 1
   });
 
-  feedback.textContent = "Iniciando cámara...";
-
+  // Activamos cámara sin mostrar UI
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
   video.srcObject = stream;
 
   video.onloadedmetadata = () => {
     video.play();
-    feedback.textContent = "Acércate a la cámara...";
     requestAnimationFrame(loop);
   };
+
 }
 
 iniciar();

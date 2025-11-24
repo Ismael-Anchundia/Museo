@@ -13,32 +13,34 @@
 
     <header>
         <h1>🏛️ Museo Interactivo</h1>
-        <p>Experiencia de arte, IA y tecnología.</p>
+        <p>Experiencia de arte y tecnología.</p>
     </header>
 
     <main>
 
         <!-- INTEGRANTE 1 -->
         <section id="modelos3d">
-            <h2>Arte y Modelos 3D (Integrante 1)</h2>
+            <h2>Museo, entorno 3D</h2>
 
             <iframe 
                 src="https://gualter302.github.io/HombreMaquina_web/" 
-                style="width: 100%; height: 600px; border: none; border-radius: 8px;">
+                style="width: 100%; height: 85vh; border: none; border-radius: 8px;">
             </iframe>
+
         </section>
 
-        <!-- INTEGRANTE 2 (Chatbot) -->
-        <section id="chatbot">
+        <!-- MENSAJE INICIAL UNIFICADO -->
+        <section id="mensaje-inicial">
+            😄 <b>Sonríe para activar el asistente virtual</b>
+        </section>
+
+        <!-- INTEGRANTE 2 (Chatbot) — OCULTO POR DEFECTO -->
+        <section id="chatbot" style="display:none;">
             <h2>🙋 Tu Guía Virtual (Integrante 2)</h2>
-
-            <p id="chatbot-status">
-                El Chatbot está bloqueado. Sonríe 😄 frente a la cámara para activarlo.
-            </p>
         </section>
 
-        <!-- INTEGRANTE 3 (IA + Cámara) -->
-        <section id="tracking">
+        <!-- INTEGRANTE 3 (IA + Cámara) — OCULTO POR DEFECTO -->
+        <section id="tracking" style="display:none;">
             <h2>📸 Cámara y Gestos (Integrante 3)</h2>
 
             <div id="video-contenedor">
@@ -56,6 +58,11 @@
 
     <!-- Chatbot flotante -->
     <div id="chatbot-flotante" style="display:none;"></div>
+
+    <!-- Burbuja minimizada -->
+    <div id="chatbot-burbuja" style="display:none;">
+        <img src="https://cdn-icons-png.flaticon.com/512/134/134914.png">
+    </div>
 
     <script type="module" src="script.js"></script>
 </body>
