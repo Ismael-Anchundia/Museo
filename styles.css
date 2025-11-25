@@ -75,7 +75,7 @@ section h2 {
 /* Barra de botones */
 #entorno-topbar {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
     right: 12px;
     z-index: 999;
 }
@@ -233,3 +233,4 @@ footer {
     font-size: 14px;
     opacity: 0.85;
 }
+
