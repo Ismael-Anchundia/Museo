@@ -1,5 +1,5 @@
 /* ============================================================
-   TIPOGRAFÍA
+   TIPOGRAFÍA Y BASE
 ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -12,7 +12,7 @@ body {
 }
 
 /* ============================================================
-   HEADER DEL MUSEO
+   HEADER
 ============================================================ */
 header {
     background: #1d1b19;
@@ -26,17 +26,15 @@ header h1 {
     font-family: 'Playfair Display', serif;
     font-size: 42px;
     margin: 0;
-    letter-spacing: 1px;
 }
 
 header p {
     margin: 8px 0 0;
-    font-size: 16px;
     opacity: 0.85;
 }
 
 /* ============================================================
-   CONTENIDO PRINCIPAL
+   CONTENIDO
 ============================================================ */
 main {
     width: min(95%, 1200px);
@@ -56,50 +54,96 @@ section h2 {
     font-family: 'Playfair Display', serif;
     font-size: 28px;
     color: #1c1a18;
-    margin-top: 0;
-    margin-bottom: 20px;
     border-bottom: 2px solid #c8a15d;
     padding-bottom: 6px;
+    margin-top: 0;
 }
 
 /* ============================================================
-   IFRAME 3D
+   ENTORNO 3D — SCALE SYSTEM
 ============================================================ */
-.frame-3d {
+
+#entorno-wrapper {
+    position: relative;
     width: 100%;
-    height: min(85vh, 900px);
+    height: 80vh;
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Barra de botones */
+#entorno-topbar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 999;
+}
+
+#entorno-topbar button {
+    background: #ffffffcc;
     border: none;
-    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background 0.2s ease;
+}
+
+#entorno-topbar button:hover {
+    background: #ffffff;
+}
+
+/* Escala reducida (60%) */
+#entorno-scaler {
+    transform: scale(0.6);
+    transform-origin: top left;
+    width: 166%;   /* 1/0.6 ≈ 1.66 */
+    height: 166%;
+}
+
+/* Iframe interno */
+#entorno-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Modo maximizado */
+.maximizado {
+    position: fixed !important;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px) !important;
+    height: calc(100% - 20px) !important;
+    z-index: 10000;
     background: #000;
+    border-radius: 12px;
+}
+
+.maximizado #entorno-scaler {
+    transform: scale(1) !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* ============================================================
-   CÁMARA
+   MENSAJE INICIAL
 ============================================================ */
-#video-contenedor {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-#webcam {
-    width: 640px;
-    max-width: 100%;
-    border-radius: 10px;
-    border: 3px solid #1d1b19;
-    background: black;
-}
-
-#feedback-gesto {
+#mensaje-inicial {
     text-align: center;
-    margin-top: 12px;
-    font-size: 18px;
-    color: #1d1b19;
+    font-size: 20px;
     font-weight: 600;
+    background: #fff3cd;
+    color: #856404;
+    padding: 18px;
+    border-radius: 10px;
+    border: 2px solid #ffeeba;
 }
 
 /* ============================================================
-   MENSAJE EMERGENTE (Sonrisa detectada)
+   MENSAJE DE SONRISA
 ============================================================ */
 #mensaje-sonrisa {
     position: fixed;
@@ -107,15 +151,14 @@ section h2 {
     left: 50%;
     transform: translateX(-50%);
     background: #27ae60;
-    color: white;
     padding: 14px 30px;
+    color: white;
     border-radius: 8px;
     font-size: 19px;
-    font-weight: 600;
     opacity: 0;
     pointer-events: none;
     z-index: 99999;
-    transition: opacity 0.35s ease-in-out;
+    transition: opacity 0.35s;
 }
 
 #mensaje-sonrisa.activo {
@@ -123,7 +166,7 @@ section h2 {
 }
 
 /* ============================================================
-   CHATBOT FLOTANTE
+   CHATBOT FLOTANTE + BURBUJA
 ============================================================ */
 #chatbot-flotante {
     position: fixed;
@@ -143,7 +186,6 @@ section h2 {
     box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 
-/* Minimizar botón */
 #boton-minimizar {
     position: absolute;
     top: -12px;
@@ -152,24 +194,13 @@ section h2 {
     height: 30px;
     background: #ffffff;
     border: 2px solid #c8a15d;
-    color: #1d1b19;
     border-radius: 50%;
     cursor: pointer;
     font-size: 18px;
-    font-weight: bold;
-    line-height: 25px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    transition: transform 0.2s ease;
+    line-height: 24px;
 }
 
-#boton-minimizar:hover {
-    transform: scale(1.08);
-}
-
-/* ============================================================
-   BURBUJA MINIMIZADA
-============================================================ */
+/* Burbuja tipo Messenger */
 #chatbot-burbuja {
     position: fixed;
     bottom: 18px;
@@ -201,9 +232,4 @@ footer {
     margin-top: 40px;
     font-size: 14px;
     opacity: 0.85;
-}
-
-/* Ocultar botón Share del chatbot (si aplica) */
-iframe {
-    --bpb-header-right-display: none !important;
 }

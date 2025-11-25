@@ -1,4 +1,4 @@
-// script.js — Sonrisa REAL + chatbot flotante + burbuja minimizada
+// script.js — Sonrisa REAL + chatbot flotante + burbuja + maximizar entorno
 
 console.log("script.js cargado ✔");
 
@@ -7,23 +7,41 @@ import {
   FilesetResolver
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs";
 
+// =============================
+// ELEMENTOS DEL DOM
+// =============================
 const video = document.getElementById("webcam");
-const feedback = document.getElementById("feedback-gesto");
-
 const mensajeInicial = document.getElementById("mensaje-inicial");
-const chatbotSection = document.getElementById("chatbot");
-const trackingSection = document.getElementById("tracking");
-
 const chatbotFlotante = document.getElementById("chatbot-flotante");
+const chatbotBurbuja = document.getElementById("chatbot-burbuja");
 const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
 
-// Burbuja minimizada
-const chatbotBurbuja = document.getElementById("chatbot-burbuja");
+// Entorno 3D (maximizar / restaurar)
+const entornoWrapper = document.getElementById("entorno-wrapper");
+const btnMax = document.getElementById("btn-max");
+const btnMin = document.getElementById("btn-min");
 
+// =============================
+// MAXIMIZAR / RESTAURAR ENTORNO 3D
+// =============================
+btnMax.addEventListener("click", () => {
+  entornoWrapper.classList.add("maximizado");
+  btnMax.style.display = "none";
+  btnMin.style.display = "inline-block";
+});
+
+btnMin.addEventListener("click", () => {
+  entornoWrapper.classList.remove("maximizado");
+  btnMax.style.display = "inline-block";
+  btnMin.style.display = "none";
+});
+
+// =============================
+// LÓGICA DETECCIÓN DE SONRISA
+// =============================
 let faceLandmarker;
 let desbloqueado = false;
 
-// Parámetros estrictos
 const SONRISA_RATIO_UMBRAL = 3.2;
 const LABIOS_SEPARADOS = 0.018;
 const SONRISA_TIEMPO_MIN = 650;
@@ -32,36 +50,27 @@ const ESTABILIDAD_CARA_MIN = 400;
 let sonrisaInicio = null;
 let caraDetectadaInicio = null;
 
-// ============================
-// Mensaje emergente
-// ============================
 function mostrarMensajeSonrisa() {
   mensajeSonrisa.classList.add("activo");
   setTimeout(() => mensajeSonrisa.classList.remove("activo"), 1800);
 }
 
-// ============================
-// DESBLOQUEAR
-// ============================
 function desbloquear() {
   if (desbloqueado) return;
   desbloqueado = true;
 
   mostrarMensajeSonrisa();
 
-  // Apagar la cámara
-  if (video.srcObject) {
+  // Apagar cámara
+  if (video && video.srcObject) {
     video.srcObject.getTracks().forEach(t => t.stop());
   }
 
-  // Ocultar secciones completas
+  // Ocultar mensaje inicial
   mensajeInicial.style.display = "none";
-  chatbotSection.style.display = "none";
-  trackingSection.style.display = "none";
 
   // Mostrar chatbot flotante
   chatbotFlotante.style.display = "block";
-
   chatbotFlotante.innerHTML = `
     <button id="boton-minimizar">–</button>
     <iframe
@@ -70,7 +79,7 @@ function desbloquear() {
     </iframe>
   `;
 
-  // Botón de minimizar
+  // Botón minimizar → burbuja
   const botonMin = document.getElementById("boton-minimizar");
   botonMin.onclick = () => {
     chatbotFlotante.style.display = "none";
@@ -78,17 +87,12 @@ function desbloquear() {
   };
 }
 
-// ============================
-// Restaurar chatbot desde burbuja
-// ============================
+// restaurar desde burbuja
 chatbotBurbuja.onclick = () => {
   chatbotBurbuja.style.display = "none";
   chatbotFlotante.style.display = "block";
 };
 
-// ============================
-// Detector de sonrisa real
-// ============================
 function detectarSonrisaReal(face) {
   const left = face[61];
   const right = face[291];
@@ -103,11 +107,11 @@ function detectarSonrisaReal(face) {
          (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
-// ============================
+// =============================
 // LOOP PRINCIPAL
-// ============================
+// =============================
 function loop() {
-  if (!video.videoWidth) {
+  if (!video || !video.videoWidth) {
     requestAnimationFrame(loop);
     return;
   }
@@ -116,7 +120,6 @@ function loop() {
   const faceRes = faceLandmarker.detectForVideo(video, now);
 
   if (faceRes?.faceLandmarks?.[0]) {
-
     const face = faceRes.faceLandmarks[0];
 
     if (!caraDetectadaInicio) {
@@ -132,17 +135,16 @@ function loop() {
 
     if (!desbloqueado) {
       if (sonrisa) {
-
         if (!sonrisaInicio) sonrisaInicio = now;
+
         const duracion = now - sonrisaInicio;
-
-        if (duracion >= SONRISA_TIEMPO_MIN) desbloquear();
-
+        if (duracion >= SONRISA_TIEMPO_MIN) {
+          desbloquear();
+        }
       } else {
         sonrisaInicio = null;
       }
     }
-
   } else {
     caraDetectadaInicio = null;
     sonrisaInicio = null;
@@ -151,11 +153,10 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-// ============================
+// =============================
 // INICIO
-// ============================
+// =============================
 async function iniciar() {
-
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
   );
@@ -169,15 +170,18 @@ async function iniciar() {
     numFaces: 1
   });
 
-  // Activamos cámara sin mostrar UI
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  if (!video) {
+    console.error("No se encontró el elemento <video id=\"webcam\">");
+    return;
+  }
+
   video.srcObject = stream;
 
   video.onloadedmetadata = () => {
     video.play();
     requestAnimationFrame(loop);
   };
-
 }
 
 iniciar();

@@ -18,15 +18,25 @@
 
     <main>
 
-        <!-- INTEGRANTE 1 -->
+        <!-- =======================
+             ENTORNO 3D (con escala + maximizar)
+        ======================== -->
         <section id="modelos3d">
             <h2>Museo, entorno 3D</h2>
 
-            <iframe 
-                src="https://gualter302.github.io/HombreMaquina_web/" 
-                style="width: 100%; height: 85vh; border: none; border-radius: 8px;">
-            </iframe>
+            <div id="entorno-wrapper">
+                <div id="entorno-topbar">
+                    <button id="btn-max" title="Maximizar">⤢</button>
+                    <button id="btn-min" title="Restaurar" style="display:none;">⤡</button>
+                </div>
 
+                <div id="entorno-scaler">
+                    <iframe
+                        id="entorno-iframe"
+                        src="https://gualter302.github.io/HombreMaquina_ProyectoWeb/">
+                    </iframe>
+                </div>
+            </div>
         </section>
 
         <!-- MENSAJE INICIAL UNIFICADO -->
@@ -34,20 +44,20 @@
             😄 <b>Sonríe para activar el asistente virtual</b>
         </section>
 
-        <!-- INTEGRANTE 2 (Chatbot) — OCULTO POR DEFECTO -->
+        <!-- INTEGRANTE 2 (solo para compatibilidad, oculto) -->
         <section id="chatbot" style="display:none;">
             <h2>🙋 Tu Guía Virtual (Integrante 2)</h2>
         </section>
 
-        <!-- INTEGRANTE 3 (IA + Cámara) — OCULTO POR DEFECTO -->
+        <!-- INTEGRANTE 3 (IA + Cámara) — OCULTO PERO EXISTE -->
         <section id="tracking" style="display:none;">
-            <h2>📸 Cámara y Gestos (Integrante 3)</h2>
+            <h2 style="display:none;">📸 Cámara y Gestos (Integrante 3)</h2>
 
             <div id="video-contenedor">
                 <video id="webcam" autoplay playsinline></video>
             </div>
 
-            <p id="feedback-gesto">Cargando modelos IA...</p>
+            <p id="feedback-gesto" style="display:none;">Cargando modelos IA...</p>
         </section>
 
     </main>
@@ -61,7 +71,7 @@
 
     <!-- Burbuja minimizada -->
     <div id="chatbot-burbuja" style="display:none;">
-        <img src="https://cdn-icons-png.flaticon.com/512/134/134914.png">
+        <img src="https://cdn-icons-png.flaticon.com/512/134/134914.png" alt="Chatbot">
     </div>
 
     <script type="module" src="script.js"></script>
