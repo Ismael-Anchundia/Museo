@@ -16,13 +16,12 @@ const chatbotFlotante = document.getElementById("chatbot-flotante");
 const chatbotBurbuja = document.getElementById("chatbot-burbuja");
 const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
 
-// Entorno 3D (maximizar / restaurar)
 const entornoWrapper = document.getElementById("entorno-wrapper");
 const btnMax = document.getElementById("btn-max");
 const btnMin = document.getElementById("btn-min");
 
 // =============================
-// MAXIMIZAR / RESTAURAR ENTORNO 3D
+// MAXIMIZAR / RESTAURAR
 // =============================
 btnMax.addEventListener("click", () => {
   entornoWrapper.classList.add("maximizado");
@@ -37,7 +36,7 @@ btnMin.addEventListener("click", () => {
 });
 
 // =============================
-// LÓGICA DETECCIÓN DE SONRISA
+// LÓGICA DE SONRISA
 // =============================
 let faceLandmarker;
 let desbloqueado = false;
@@ -61,15 +60,12 @@ function desbloquear() {
 
   mostrarMensajeSonrisa();
 
-  // Apagar cámara
   if (video && video.srcObject) {
     video.srcObject.getTracks().forEach(t => t.stop());
   }
 
-  // Ocultar mensaje inicial
   mensajeInicial.style.display = "none";
 
-  // Mostrar chatbot flotante
   chatbotFlotante.style.display = "block";
   chatbotFlotante.innerHTML = `
     <button id="boton-minimizar">–</button>
@@ -80,8 +76,6 @@ function desbloquear() {
     </iframe>
   `;
 
-
-  // Botón minimizar → burbuja
   const botonMin = document.getElementById("boton-minimizar");
   botonMin.onclick = () => {
     chatbotFlotante.style.display = "none";
@@ -89,7 +83,6 @@ function desbloquear() {
   };
 }
 
-// restaurar desde burbuja
 chatbotBurbuja.onclick = () => {
   chatbotBurbuja.style.display = "none";
   chatbotFlotante.style.display = "block";
@@ -105,13 +98,10 @@ function detectarSonrisaReal(face) {
   const height = Math.abs(bottomLip.y - topLip.y);
   const ratio = width / height;
 
-  return ratio > SONRISA_RATIO_UMBRAL &&
+  return ratio > SONRISA_RATIO_UMBRAL && 
     (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
-// =============================
-// LOOP PRINCIPAL
-// =============================
 function loop() {
   if (!video || !video.videoWidth) {
     requestAnimationFrame(loop);
@@ -155,9 +145,6 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-// =============================
-// INICIO
-// =============================
 async function iniciar() {
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
@@ -173,10 +160,7 @@ async function iniciar() {
   });
 
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-  if (!video) {
-    console.error("No se encontró el elemento <video id=\"webcam\">");
-    return;
-  }
+  if (!video) return;
 
   video.srcObject = stream;
 

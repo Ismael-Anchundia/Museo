@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museo Interactivo</title>
     <link rel="stylesheet" href="styles.css">
+
+    <!-- 🔥 Script de redirección automática PC / Móvil -->
+    <script>
+        function esMovil() {
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const iframe = document.getElementById("entorno-iframe");
+
+            const urlPC = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
+            const urlMovil = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
+
+            iframe.src = esMovil() ? urlMovil : urlPC;
+        });
+    </script>
 </head>
 
 <body>
@@ -17,38 +33,11 @@
         <h1>🏛️ Museo Interactivo</h1>
         <p>Experiencia de arte y tecnología.</p>
     </header>
-    <!-- =======================
-             SECCIÓN DE CÓDIGOS QR (Diseño Artístico)
-        ======================== -->
-    <section id="qr-section">
-        <h2>🎨 Accesos Artísticos en QR</h2>
-
-        <p class="qr-desc">
-            Explora nuestras experiencias interactivas a través de estos códigos QR.
-            Cada uno te conecta con una parte única del museo.
-        </p>
-
-        <div class="qr-container">
-
-            <!-- QR 1: Museo móvil -->
-            <div class="qr-item">
-                <h3>Museo Virtual (Móvil)</h3>
-                <img src="qr/qr_museo_mobile.png" alt="QR Museo Móvil">
-            </div>
-
-            <!-- QR 2: Animación AR / VR -->
-            <div class="qr-item">
-                <h3>Animación 3D + AR</h3>
-                <img src="qr/qr_animacion_ar.png" alt="QR Animación AR">
-            </div>
-
-        </div>
-    </section>
 
     <main>
 
         <!-- =======================
-             ENTORNO 3D (con escala + maximizar)
+             ENTORNO 3D
         ======================== -->
         <section id="modelos3d">
             <h2>Museo, entorno 3D</h2>
@@ -60,25 +49,20 @@
                 </div>
 
                 <div id="entorno-scaler">
-                    <iframe id="entorno-iframe" src="https://gualter302.github.io/HombreMaquina_ProyectoWeb/">
-                    </iframe>
+                    <!-- ⚡ Se asigna dinámicamente PC o móvil -->
+                    <iframe id="entorno-iframe"></iframe>
                 </div>
             </div>
         </section>
 
-        <!-- MENSAJE INICIAL UNIFICADO -->
+        <!-- MENSAJE INICIAL -->
         <section id="mensaje-inicial">
             😄 <b>Sonríe para activar el asistente virtual</b>
         </section>
 
-        <!-- INTEGRANTE 2 (solo para compatibilidad, oculto) -->
-        <section id="chatbot" style="display:none;">
-            <h2>🙋 Tu Guía Virtual (Integrante 2)</h2>
-        </section>
-
-        <!-- INTEGRANTE 3 (IA + Cámara) — OCULTO PERO EXISTE -->
+        <!-- IA de cámara (oculto) -->
         <section id="tracking" style="display:none;">
-            <h2 style="display:none;">📸 Cámara y Gestos (Integrante 3)</h2>
+            <h2 style="display:none;">📸 Cámara y Gestos</h2>
 
             <div id="video-contenedor">
                 <video id="webcam" autoplay playsinline></video>

@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #f6f1e7; /* Crema artístico */
+    background: #f6f1e7;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -13,15 +13,15 @@ body {
 }
 
 /* ============================================================
-   HEADER — estilo galería de arte
+   HEADER
 ============================================================ */
 header {
-    background: #1d1b19; /* Negro profundo artístico */
+    background: #1d1b19;
     color: #f6f1e7;
     text-align: center;
     padding: 40px 10px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-    border-bottom: 4px solid #c8a15d; /* Dorado */
+    border-bottom: 4px solid #c8a15d;
 }
 
 header h1 {
@@ -60,11 +60,10 @@ section h2 {
     color: #1d1b19;
     border-bottom: 3px solid #c8a15d;
     padding-bottom: 6px;
-    margin-top: 0;
 }
 
 /* ============================================================
-   ENTORNO 3D — marco artístico para la sala virtual
+   ENTORNO 3D
 ============================================================ */
 #entorno-wrapper {
     position: relative;
@@ -131,7 +130,7 @@ section h2 {
 }
 
 /* ============================================================
-   MENSAJE INICIAL — estilo papel pergamino
+   MENSAJE INICIAL
 ============================================================ */
 #mensaje-inicial {
     text-align: center;
@@ -146,7 +145,7 @@ section h2 {
 }
 
 /* ============================================================
-   MENSAJE DE SONRISA — verde elegante
+   MENSAJE SONRISA
 ============================================================ */
 #mensaje-sonrisa {
     position: fixed;
@@ -169,7 +168,7 @@ section h2 {
 }
 
 /* ============================================================
-   CHATBOT flotante — mínimos cambios visuales
+   CHATBOT flotante
 ============================================================ */
 #chatbot-flotante {
     position: fixed;
@@ -221,69 +220,6 @@ section h2 {
 
 #chatbot-burbuja img {
     width: 34px;
-}
-
-/* ============================================================
-   SECCIÓN QR — estilo de galería artística
-============================================================ */
-#qr-section {
-    background: #faf6ef;
-    border-radius: 16px;
-    padding: 35px;
-    margin-bottom: 40px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    border-left: 6px solid #c8a15d;
-    border-right: 6px solid #c8a15d;
-}
-
-#qr-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    text-align: center;
-    margin-bottom: 12px;
-    color: #1d1b19;
-}
-
-.qr-desc {
-    text-align: center;
-    font-size: 17px;
-    color: #4a3f35;
-    margin-bottom: 25px;
-    font-style: italic;
-}
-
-.qr-container {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-}
-
-.qr-item {
-    text-align: center;
-    max-width: 200px;
-}
-
-.qr-item h3 {
-    font-size: 18px;
-    margin-bottom: 12px;
-    color: #1d1b19;
-    font-weight: 600;
-    font-family: 'Playfair Display', serif;
-}
-
-.qr-item img {
-    width: 150px;
-    height: 150px;
-    border-radius: 12px;
-    border: 3px solid #c8a15d;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    background: white;
-    transition: transform 0.2s ease;
-}
-
-.qr-item img:hover {
-    transform: scale(1.05);
 }
 
 /* ============================================================
