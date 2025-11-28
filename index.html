@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museo Interactivo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <!-- MENSAJE EMERGENTE -->
@@ -15,6 +17,29 @@
         <h1>🏛️ Museo Interactivo</h1>
         <p>Experiencia de arte y tecnología.</p>
     </header>
+    <!-- =======================
+             SECCIÓN DE CÓDIGOS QR
+        ======================== -->
+    <section id="qr-section">
+        <h2>Accesos Rápidos con QR</h2>
+
+        <div class="qr-container">
+
+            <!-- QR 1: Museo móvil -->
+            <div class="qr-item">
+                <h3>Museo Virtual (versión móvil)</h3>
+                <img src="qr/qr_museo_mobile.png" alt="QR Museo Móvil">
+            </div>
+
+            <!-- QR 2: Animación AR / VR -->
+            <div class="qr-item">
+                <h3>Animación 3D + AR</h3>
+                <img src="qr/qr_animacion_ar.png" alt="QR Animación AR">
+            </div>
+
+        </div>
+    </section>
+
 
     <main>
 
@@ -31,9 +56,7 @@
                 </div>
 
                 <div id="entorno-scaler">
-                    <iframe
-                        id="entorno-iframe"
-                        src="https://gualter302.github.io/HombreMaquina_ProyectoWeb/">
+                    <iframe id="entorno-iframe" src="https://gualter302.github.io/HombreMaquina_ProyectoWeb/">
                     </iframe>
                 </div>
             </div>
@@ -76,4 +99,5 @@
 
     <script type="module" src="script.js"></script>
 </body>
+
 </html>
