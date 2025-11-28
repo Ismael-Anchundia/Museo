@@ -74,10 +74,12 @@ function desbloquear() {
   chatbotFlotante.innerHTML = `
     <button id="boton-minimizar">–</button>
     <iframe
+      allow="microphone; autoplay; clipboard-read; clipboard-write"
       src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json"
       title="Chatbot">
     </iframe>
   `;
+
 
   // Botón minimizar → burbuja
   const botonMin = document.getElementById("boton-minimizar");
@@ -104,7 +106,7 @@ function detectarSonrisaReal(face) {
   const ratio = width / height;
 
   return ratio > SONRISA_RATIO_UMBRAL &&
-         (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
+    (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
 // =============================
