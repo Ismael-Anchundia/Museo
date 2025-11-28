@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museo Interactivo</title>
     <link rel="stylesheet" href="styles.css">
-
-    <!-- 🔥 Script de redirección automática PC / Móvil -->
-    <script>
-        function esMovil() {
-            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const iframe = document.getElementById("entorno-iframe");
-
-            const urlPC = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
-            const urlMovil = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
-
-            iframe.src = esMovil() ? urlMovil : urlPC;
-        });
-    </script>
 </head>
-
 <body>
 
     <!-- MENSAJE EMERGENTE -->
@@ -49,8 +31,10 @@
                 </div>
 
                 <div id="entorno-scaler">
-                    <!-- ⚡ Se asigna dinámicamente PC o móvil -->
-                    <iframe id="entorno-iframe"></iframe>
+                    <iframe
+                        id="entorno-iframe"
+                        src="">
+                    </iframe>
                 </div>
             </div>
         </section>
@@ -60,15 +44,31 @@
             😄 <b>Sonríe para activar el asistente virtual</b>
         </section>
 
-        <!-- IA de cámara (oculto) -->
-        <section id="tracking" style="display:none;">
-            <h2 style="display:none;">📸 Cámara y Gestos</h2>
+        <!-- CHATBOT (Integrante 2) -->
+        <section id="chatbot" style="display:none;"></section>
 
+        <!-- TRACKING / CÁMARA (Integrante 3) -->
+        <section id="tracking" style="display:none;">
             <div id="video-contenedor">
                 <video id="webcam" autoplay playsinline></video>
             </div>
+        </section>
 
-            <p id="feedback-gesto" style="display:none;">Cargando modelos IA...</p>
+        <!-- =======================
+             SECCIÓN DE CÓDIGOS QR
+        ======================== -->
+        <section id="qr-section">
+            <h2>🎨 Acceso a la Animación AR</h2>
+
+            <p class="qr-desc">
+                Escanea este código para ver la estatua animada en 3D y Realidad Aumentada.
+            </p>
+
+            <div class="qr-container">
+                <div class="qr-item">
+                    <img src="qr/qr_animacion_ar.png" alt="QR Animación AR">
+                </div>
+            </div>
         </section>
 
     </main>
@@ -87,5 +87,4 @@
 
     <script type="module" src="script.js"></script>
 </body>
-
 </html>

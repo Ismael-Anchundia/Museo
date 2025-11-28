@@ -1,4 +1,4 @@
-// script.js — Sonrisa REAL + chatbot flotante + burbuja + maximizar entorno
+// script.js — Sonrisa + Chatbot + Cámara + Museo dinámico
 
 console.log("script.js cargado ✔");
 
@@ -7,22 +7,22 @@ import {
   FilesetResolver
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs";
 
-// =============================
-// ELEMENTOS DEL DOM
-// =============================
+/* ============================================================
+   ELEMENTOS
+============================================================ */
 const video = document.getElementById("webcam");
 const mensajeInicial = document.getElementById("mensaje-inicial");
+const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
 const chatbotFlotante = document.getElementById("chatbot-flotante");
 const chatbotBurbuja = document.getElementById("chatbot-burbuja");
-const mensajeSonrisa = document.getElementById("mensaje-sonrisa");
 
 const entornoWrapper = document.getElementById("entorno-wrapper");
 const btnMax = document.getElementById("btn-max");
 const btnMin = document.getElementById("btn-min");
 
-// =============================
-// MAXIMIZAR / RESTAURAR
-// =============================
+/* ============================================================
+   MAXIMIZAR ENTORNO
+============================================================ */
 btnMax.addEventListener("click", () => {
   entornoWrapper.classList.add("maximizado");
   btnMax.style.display = "none";
@@ -35,9 +35,9 @@ btnMin.addEventListener("click", () => {
   btnMin.style.display = "none";
 });
 
-// =============================
-// LÓGICA DE SONRISA
-// =============================
+/* ============================================================
+   LÓGICA DE SONRISA
+============================================================ */
 let faceLandmarker;
 let desbloqueado = false;
 
@@ -96,12 +96,14 @@ function detectarSonrisaReal(face) {
 
   const width = Math.abs(right.x - left.x);
   const height = Math.abs(bottomLip.y - topLip.y);
-  const ratio = width / height;
 
-  return ratio > SONRISA_RATIO_UMBRAL && 
-    (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
+  return (width / height) > SONRISA_RATIO_UMBRAL &&
+         (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
+/* ============================================================
+   LOOP
+============================================================ */
 function loop() {
   if (!video || !video.videoWidth) {
     requestAnimationFrame(loop);
@@ -109,10 +111,10 @@ function loop() {
   }
 
   const now = performance.now();
-  const faceRes = faceLandmarker.detectForVideo(video, now);
+  const res = faceLandmarker.detectForVideo(video, now);
 
-  if (faceRes?.faceLandmarks?.[0]) {
-    const face = faceRes.faceLandmarks[0];
+  if (res?.faceLandmarks?.[0]) {
+    const face = res.faceLandmarks[0];
 
     if (!caraDetectadaInicio) {
       caraDetectadaInicio = now;
@@ -130,9 +132,7 @@ function loop() {
         if (!sonrisaInicio) sonrisaInicio = now;
 
         const duracion = now - sonrisaInicio;
-        if (duracion >= SONRISA_TIEMPO_MIN) {
-          desbloquear();
-        }
+        if (duracion >= SONRISA_TIEMPO_MIN) desbloquear();
       } else {
         sonrisaInicio = null;
       }
@@ -145,6 +145,9 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
+/* ============================================================
+   INICIO
+============================================================ */
 async function iniciar() {
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
@@ -160,8 +163,6 @@ async function iniciar() {
   });
 
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-  if (!video) return;
-
   video.srcObject = stream;
 
   video.onloadedmetadata = () => {
@@ -171,3 +172,18 @@ async function iniciar() {
 }
 
 iniciar();
+
+/* ============================================================
+   DETECCIÓN DE DISPOSITIVO → Cargar versión PC o MOBILE del museo
+============================================================ */
+const entornoIframe = document.getElementById("entorno-iframe");
+
+if (entornoIframe) {
+    const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
+    } else {
+        entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
+    }
+}
