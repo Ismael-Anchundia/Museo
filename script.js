@@ -1,4 +1,6 @@
-// script.js — Sonrisa + Chatbot + Cámara + Museo dinámico
+// =============================
+// script.js — Versión FINAL
+// =============================
 
 console.log("script.js cargado ✔");
 
@@ -7,8 +9,9 @@ import {
   FilesetResolver
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs";
 
+
 /* ============================================================
-   ELEMENTOS
+   ELEMENTOS DEL DOM
 ============================================================ */
 const video = document.getElementById("webcam");
 const mensajeInicial = document.getElementById("mensaje-inicial");
@@ -19,21 +22,58 @@ const chatbotBurbuja = document.getElementById("chatbot-burbuja");
 const entornoWrapper = document.getElementById("entorno-wrapper");
 const btnMax = document.getElementById("btn-max");
 const btnMin = document.getElementById("btn-min");
+const entornoIframe = document.getElementById("entorno-iframe");
+
 
 /* ============================================================
-   MAXIMIZAR ENTORNO
+   MAXIMIZAR ENTORNO (Responsive + Landscape Mobile)
 ============================================================ */
-btnMax.addEventListener("click", () => {
+btnMax.addEventListener("click", async () => {
   entornoWrapper.classList.add("maximizado");
   btnMax.style.display = "none";
   btnMin.style.display = "inline-block";
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    try {
+      if (entornoWrapper.requestFullscreen) {
+        await entornoWrapper.requestFullscreen();
+      }
+
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (e) {
+      console.log("No se pudo forzar landscape:", e);
+    }
+  }
 });
 
-btnMin.addEventListener("click", () => {
+btnMin.addEventListener("click", async () => {
   entornoWrapper.classList.remove("maximizado");
   btnMax.style.display = "inline-block";
   btnMin.style.display = "none";
+
+  if (document.fullscreenElement) {
+    await document.exitFullscreen();
+  }
 });
+
+
+/* ============================================================
+   DETECCIÓN DE DISPOSITIVO → Cargar versión PC o MOBILE
+============================================================ */
+if (entornoIframe) {
+  const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
+  } else {
+    entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
+  }
+}
+
 
 /* ============================================================
    LÓGICA DE SONRISA
@@ -48,6 +88,7 @@ const ESTABILIDAD_CARA_MIN = 400;
 
 let sonrisaInicio = null;
 let caraDetectadaInicio = null;
+
 
 function mostrarMensajeSonrisa() {
   mensajeSonrisa.classList.add("activo");
@@ -66,13 +107,14 @@ function desbloquear() {
 
   mensajeInicial.style.display = "none";
 
+  // Chatbot activo
   chatbotFlotante.style.display = "block";
   chatbotFlotante.innerHTML = `
     <button id="boton-minimizar">–</button>
     <iframe
-      allow="microphone; autoplay; clipboard-read; clipboard-write"
-      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json"
-      title="Chatbot">
+        allow="microphone; autoplay; clipboard-read; clipboard-write"
+        src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json"
+        title="Chatbot">
     </iframe>
   `;
 
@@ -88,6 +130,7 @@ chatbotBurbuja.onclick = () => {
   chatbotFlotante.style.display = "block";
 };
 
+
 function detectarSonrisaReal(face) {
   const left = face[61];
   const right = face[291];
@@ -101,8 +144,9 @@ function detectarSonrisaReal(face) {
          (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
 }
 
+
 /* ============================================================
-   LOOP
+   LOOP PRINCIPAL
 ============================================================ */
 function loop() {
   if (!video || !video.videoWidth) {
@@ -122,7 +166,8 @@ function loop() {
     }
 
     if (now - caraDetectadaInicio < ESTABILIDAD_CARA_MIN) {
-      return requestAnimationFrame(loop);
+      requestAnimationFrame(loop);
+      return;
     }
 
     const sonrisa = detectarSonrisaReal(face);
@@ -145,8 +190,9 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
+
 /* ============================================================
-   INICIO
+   INICIO DE LA CÁMARA Y MODELOS
 ============================================================ */
 async function iniciar() {
   const vision = await FilesetResolver.forVisionTasks(
@@ -172,18 +218,3 @@ async function iniciar() {
 }
 
 iniciar();
-
-/* ============================================================
-   DETECCIÓN DE DISPOSITIVO → Cargar versión PC o MOBILE del museo
-============================================================ */
-const entornoIframe = document.getElementById("entorno-iframe");
-
-if (entornoIframe) {
-    const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
-    } else {
-        entornoIframe.src = "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
-    }
-}

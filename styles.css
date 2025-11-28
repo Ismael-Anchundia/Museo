@@ -13,7 +13,7 @@ body {
 }
 
 /* ============================================================
-   HEADER — estilo galería de arte
+   HEADER
 ============================================================ */
 header {
     background: #1d1b19;
@@ -37,7 +37,7 @@ header p {
 }
 
 /* ============================================================
-   CONTENEDOR PRINCIPAL
+   CONTENEDOR MAIN
 ============================================================ */
 main {
     width: min(95%, 1200px);
@@ -63,7 +63,7 @@ section h2 {
 }
 
 /* ============================================================
-   ENTORNO 3D — Marco artístico
+   ENTORNO 3D
 ============================================================ */
 #entorno-wrapper {
     position: relative;
@@ -114,13 +114,14 @@ section h2 {
 
 .maximizado {
     position: fixed !important;
-    top: 10px;
-    left: 10px;
-    width: calc(100% - 20px) !important;
-    height: calc(100% - 20px) !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
     z-index: 10000;
     background: #000;
-    border-radius: 14px;
+    border-radius: 0 !important;
+    border-width: 0 !important;
 }
 
 .maximizado #entorno-scaler {
@@ -223,7 +224,7 @@ section h2 {
 }
 
 /* ============================================================
-   SECCIÓN QR — 1 solo QR
+   SECCIÓN QR
 ============================================================ */
 #qr-section {
     background: #faf6ef;
@@ -234,11 +235,6 @@ section h2 {
     border-left: 6px solid #c8a15d;
     border-right: 6px solid #c8a15d;
     text-align: center;
-}
-
-#qr-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
 }
 
 .qr-desc {
@@ -278,4 +274,80 @@ footer {
     font-size: 14px;
     opacity: 0.9;
     border-top: 4px solid #c8a15d;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+============================================================ */
+@media (max-width: 768px) {
+
+    #entorno-wrapper {
+        height: 60vh;
+        border-width: 3px;
+    }
+
+    #entorno-scaler {
+        transform: scale(1);
+        width: 100%;
+        height: 100%;
+    }
+
+    #entorno-topbar button {
+        padding: 6px 10px;
+        font-size: 16px;
+    }
+
+    #mensaje-inicial {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .qr-item img {
+        width: 125px;
+        height: 125px;
+    }
+
+    /* Chatbot fullscreen mobile */
+    #chatbot-flotante {
+        width: 100vw;
+        height: 100vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 0 !important;
+    }
+
+    #chatbot-flotante iframe {
+        border-radius: 0 !important;
+    }
+
+    #boton-minimizar {
+        top: 10px;
+        right: 10px;
+    }
+
+    #chatbot-burbuja {
+        width: 55px;
+        height: 55px;
+    }
+
+    #chatbot-burbuja img {
+        width: 28px;
+    }
+}
+
+/* ============================================================
+   LANDSCAPE MOBILE
+============================================================ */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    #entorno-wrapper {
+        height: 100vh;
+        border-radius: 0 !important;
+        border-width: 0 !important;
+    }
+
+    #entorno-scaler {
+        transform: scale(1);
+        width: 100%;
+        height: 100%;
+    }
 }
