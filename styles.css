@@ -20,6 +20,7 @@ header {
     color: #f6f1e7;
     text-align: center;
     padding: 40px 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
     border-bottom: 4px solid #c8a15d;
 }
 
@@ -36,7 +37,7 @@ header p {
 }
 
 /* ============================================================
-   MAIN
+   CONTENEDOR PRINCIPAL
 ============================================================ */
 main {
     width: min(95%, 1200px);
@@ -58,6 +59,7 @@ section h2 {
     font-size: 30px;
     border-bottom: 3px solid #c8a15d;
     padding-bottom: 6px;
+    margin-top: 0;
 }
 
 /* ============================================================
@@ -70,6 +72,7 @@ section h2 {
     background: #0e0e0e;
     border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
     border: 4px solid #c8a15d;
 }
 
@@ -88,7 +91,12 @@ section h2 {
     border-radius: 6px;
     cursor: pointer;
     margin-left: 5px;
+    transition: background 0.2s ease;
     font-weight: bold;
+}
+
+#entorno-topbar button:hover {
+    background: #ffffff;
 }
 
 #entorno-scaler {
@@ -104,14 +112,16 @@ section h2 {
     border: none;
 }
 
-/* MAXIMIZADO */
 .maximizado {
     position: fixed !important;
-    top: 10px;
-    left: 10px;
-    width: calc(100% - 20px) !important;
-    height: calc(100% - 20px) !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
     z-index: 10000;
+    background: #000;
+    border-radius: 0 !important;
+    border-width: 0 !important;
 }
 
 .maximizado #entorno-scaler {
@@ -121,7 +131,7 @@ section h2 {
 }
 
 /* ============================================================
-   MENSAJE SONRISA
+   MENSAJE INICIAL
 ============================================================ */
 #mensaje-inicial {
     text-align: center;
@@ -131,8 +141,13 @@ section h2 {
     color: #66552d;
     padding: 18px;
     border-radius: 12px;
+    border: 2px solid #e8dbb5;
+    box-shadow: 0 0 12px rgba(0,0,0,0.05);
 }
 
+/* ============================================================
+   MENSAJE DE SONRISA
+============================================================ */
 #mensaje-sonrisa {
     position: fixed;
     top: 25px;
@@ -142,27 +157,28 @@ section h2 {
     padding: 16px 30px;
     color: white;
     border-radius: 10px;
-    visibility: hidden;
+    font-size: 18px;
     opacity: 0;
+    pointer-events: none;
+    z-index: 99999;
     transition: opacity 0.35s;
 }
 
 #mensaje-sonrisa.activo {
-    visibility: visible;
     opacity: 1;
 }
 
 /* ============================================================
-   CHATBOT
+   CHATBOT FLOTANTE
 ============================================================ */
 #chatbot-flotante {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 18px;
+    right: 18px;
     width: 380px;
     height: 520px;
     display: none;
-    z-index: 10000;
+    z-index: 9999;
 }
 
 #chatbot-flotante iframe {
@@ -170,6 +186,7 @@ section h2 {
     height: 100%;
     border-radius: 14px;
     border: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
     background: white;
 }
 
@@ -183,21 +200,23 @@ section h2 {
     border: 2px solid #c8a15d;
     border-radius: 50%;
     cursor: pointer;
+    font-size: 18px;
 }
 
-/* BURBUJA */
 #chatbot-burbuja {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 18px;
+    right: 18px;
     width: 60px;
     height: 60px;
     background: #c8a15d;
     border-radius: 50%;
     display: none;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.30);
+    z-index: 9999;
 }
 
 #chatbot-burbuja img {
@@ -211,6 +230,8 @@ section h2 {
     background: #faf6ef;
     border-radius: 16px;
     padding: 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
     border-left: 6px solid #c8a15d;
     border-right: 6px solid #c8a15d;
     text-align: center;
@@ -222,6 +243,11 @@ section h2 {
     color: #4a3f35;
 }
 
+.qr-container {
+    display: flex;
+    justify-content: center;
+}
+
 .qr-item img {
     width: 150px;
     height: 150px;
@@ -229,7 +255,7 @@ section h2 {
     border: 3px solid #c8a15d;
     background: white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: 0.2s;
+    transition: transform 0.2s ease;
 }
 
 .qr-item img:hover {
@@ -244,5 +270,84 @@ footer {
     padding: 20px;
     background: #1d1b19;
     color: #f6f1e7;
+    margin-top: 40px;
     font-size: 14px;
+    opacity: 0.9;
+    border-top: 4px solid #c8a15d;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+============================================================ */
+@media (max-width: 768px) {
+
+    #entorno-wrapper {
+        height: 60vh;
+        border-width: 3px;
+    }
+
+    #entorno-scaler {
+        transform: scale(1);
+        width: 100%;
+        height: 100%;
+    }
+
+    #entorno-topbar button {
+        padding: 6px 10px;
+        font-size: 16px;
+    }
+
+    #mensaje-inicial {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .qr-item img {
+        width: 125px;
+        height: 125px;
+    }
+
+    /* Chatbot fullscreen en móvil */
+    #chatbot-flotante {
+        width: 100vw;
+        height: 100vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 0 !important;
+    }
+
+    #chatbot-flotante iframe {
+        border-radius: 0 !important;
+    }
+
+    #boton-minimizar {
+        top: 10px;
+        right: 10px;
+    }
+
+    #chatbot-burbuja {
+        width: 55px;
+        height: 55px;
+    }
+
+    #chatbot-burbuja img {
+        width: 28px;
+    }
+}
+
+/* ============================================================
+   LANDSCAPE MOBILE (cuando ya giró el usuario)
+============================================================ */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    #entorno-wrapper {
+        height: 100vh;
+        border-radius: 0 !important;
+        border-width: 0 !important;
+    }
+
+    #entorno-scaler {
+        transform: scale(1);
+        width: 100%;
+        height: 100%;
+    }
 }

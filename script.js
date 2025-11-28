@@ -1,3 +1,7 @@
+// =============================
+// script.js — Versión FINAL CORREGIDA
+// =============================
+
 console.log("script.js cargado ✔");
 
 import {
@@ -6,7 +10,7 @@ import {
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs";
 
 /* ============================================================
-   ELEMENTOS
+   ELEMENTOS DEL DOM
 ============================================================ */
 const video = document.getElementById("webcam");
 const mensajeInicial = document.getElementById("mensaje-inicial");
@@ -17,24 +21,75 @@ const chatbotBurbuja = document.getElementById("chatbot-burbuja");
 const entornoWrapper = document.getElementById("entorno-wrapper");
 const btnMax = document.getElementById("btn-max");
 const btnMin = document.getElementById("btn-min");
+const entornoIframe = document.getElementById("entorno-iframe");
 
 /* ============================================================
-   MAXIMIZAR ENTORNO
+   DETECCIÓN DE DISPOSITIVO → Cargar versión PC o MOBILE
 ============================================================ */
-btnMax.onclick = () => {
+if (entornoIframe) {
+  const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(
+    navigator.userAgent
+  );
+
+  if (isMobile) {
+    entornoIframe.src =
+      "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/";
+  } else {
+    entornoIframe.src =
+      "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
+  }
+}
+
+/* ============================================================
+   MAXIMIZAR ENTORNO (Responsive + intento de Landscape en móvil)
+============================================================ */
+btnMax.addEventListener("click", async () => {
   entornoWrapper.classList.add("maximizado");
   btnMax.style.display = "none";
   btnMin.style.display = "inline-block";
-};
 
-btnMin.onclick = () => {
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    try {
+      // Intentar fullscreen en el contenedor
+      if (entornoWrapper.requestFullscreen) {
+        await entornoWrapper.requestFullscreen();
+      } else if (entornoWrapper.webkitRequestFullscreen) {
+        // iOS Safari viejo
+        entornoWrapper.webkitRequestFullscreen();
+      }
+
+      // Intentar bloquear orientación (suele funcionar en Android Chrome, NO en iOS)
+      if (screen.orientation && screen.orientation.lock) {
+        try {
+          await screen.orientation.lock("landscape");
+        } catch (err) {
+          console.log("No se pudo bloquear orientación:", err);
+        }
+      }
+    } catch (e) {
+      console.log("Error al intentar fullscreen/orientación:", e);
+    }
+  }
+});
+
+btnMin.addEventListener("click", async () => {
   entornoWrapper.classList.remove("maximizado");
   btnMax.style.display = "inline-block";
   btnMin.style.display = "none";
-};
+
+  if (document.fullscreenElement) {
+    try {
+      await document.exitFullscreen();
+    } catch (e) {
+      console.log("Error al salir de fullscreen:", e);
+    }
+  }
+});
 
 /* ============================================================
-   SONRISA
+   LÓGICA DE SONRISA
 ============================================================ */
 let faceLandmarker;
 let desbloqueado = false;
@@ -58,34 +113,31 @@ function desbloquear() {
 
   mostrarMensajeSonrisa();
 
-  // apagar cámara
-  if (video.srcObject) {
-    video.srcObject.getTracks().forEach(t => t.stop());
+  if (video && video.srcObject) {
+    video.srcObject.getTracks().forEach((t) => t.stop());
   }
 
-  // ocultar mensaje
   mensajeInicial.style.display = "none";
 
-  // CHATBOT flotante SIN FULLSCREEN EN MÓVIL
+  // Chatbot flotante
+  chatbotFlotante.style.display = "block";
   chatbotFlotante.innerHTML = `
     <button id="boton-minimizar">–</button>
     <iframe
-      allow="microphone; autoplay"
-      style="width:100%; height:100%; border:none; border-radius:14px;"
-      src="https://cdn.botpress.cloud/webchat/v3/index.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json">
+      allow="microphone; autoplay; clipboard-read; clipboard-write"
+      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/08/00/20251108000118-XJB726CY.json"
+      title="Chatbot">
     </iframe>
   `;
 
-  chatbotFlotante.style.display = "block";
-
-  // minimizar → burbuja
-  document.getElementById("boton-minimizar").onclick = () => {
+  const botonMin = document.getElementById("boton-minimizar");
+  botonMin.onclick = () => {
     chatbotFlotante.style.display = "none";
     chatbotBurbuja.style.display = "flex";
   };
 }
 
-// restaurar chatbot desde burbuja
+// restaurar desde burbuja
 chatbotBurbuja.onclick = () => {
   chatbotBurbuja.style.display = "none";
   chatbotFlotante.style.display = "block";
@@ -100,45 +152,50 @@ function detectarSonrisaReal(face) {
   const width = Math.abs(right.x - left.x);
   const height = Math.abs(bottomLip.y - topLip.y);
 
-  return (width / height) > SONRISA_RATIO_UMBRAL &&
-         (bottomLip.y - topLip.y) > LABIOS_SEPARADOS;
+  return width / height > SONRISA_RATIO_UMBRAL &&
+    bottomLip.y - topLip.y > LABIOS_SEPARADOS;
 }
 
 /* ============================================================
-   LOOP
+   LOOP PRINCIPAL
 ============================================================ */
 function loop() {
-  if (!video || !video.videoWidth) return requestAnimationFrame(loop);
+  if (!video || !video.videoWidth) {
+    requestAnimationFrame(loop);
+    return;
+  }
 
   const now = performance.now();
   const res = faceLandmarker.detectForVideo(video, now);
 
   if (res?.faceLandmarks?.[0]) {
-
     const face = res.faceLandmarks[0];
 
     if (!caraDetectadaInicio) {
       caraDetectadaInicio = now;
-      return requestAnimationFrame(loop);
+      requestAnimationFrame(loop);
+      return;
     }
 
-    if (now - caraDetectadaInicio < ESTABILIDAD_CARA_MIN)
-      return requestAnimationFrame(loop);
+    if (now - caraDetectadaInicio < ESTABILIDAD_CARA_MIN) {
+      requestAnimationFrame(loop);
+      return;
+    }
 
     const sonrisa = detectarSonrisaReal(face);
 
     if (!desbloqueado) {
       if (sonrisa) {
         if (!sonrisaInicio) sonrisaInicio = now;
+
         const duracion = now - sonrisaInicio;
-
-        if (duracion >= SONRISA_TIEMPO_MIN) desbloquear();
-
+        if (duracion >= SONRISA_TIEMPO_MIN) {
+          desbloquear();
+        }
       } else {
         sonrisaInicio = null;
       }
     }
-
   } else {
     caraDetectadaInicio = null;
     sonrisaInicio = null;
@@ -148,10 +205,9 @@ function loop() {
 }
 
 /* ============================================================
-   INICIAR DETECCIÓN DE ROSTRO
+   INICIO
 ============================================================ */
 async function iniciar() {
-
   const vision = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
   );
@@ -159,10 +215,10 @@ async function iniciar() {
   faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
     baseOptions: {
       modelAssetPath:
-        "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
+        "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
     },
     runningMode: "VIDEO",
-    numFaces: 1
+    numFaces: 1,
   });
 
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -175,16 +231,3 @@ async function iniciar() {
 }
 
 iniciar();
-
-/* ============================================================
-   MUSEO: CARGAR VERSIÓN PC O MÓVIL
-============================================================ */
-const entornoIframe = document.getElementById("entorno-iframe");
-
-if (entornoIframe) {
-    const isMobile = /Android|iPhone|iPad|iPod|Phone|Mobile/i.test(navigator.userAgent);
-
-    entornoIframe.src = isMobile
-        ? "https://gualter302.github.io/HombreMaquina_ProyectoWeb/mobile/"
-        : "https://gualter302.github.io/HombreMaquina_ProyectoWeb/";
-}
