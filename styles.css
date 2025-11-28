@@ -1,25 +1,27 @@
 /* ============================================================
-   TIPOGRAFÍA Y BASE
+   TIPOGRAFÍA Y BASE ESTÉTICA
 ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #f0e9dd;
+    background: #f6f1e7; /* Crema artístico */
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    color: #1d1b19;
 }
 
 /* ============================================================
-   HEADER
+   HEADER — estilo galería de arte
 ============================================================ */
 header {
-    background: #1d1b19;
-    color: white;
+    background: #1d1b19; /* Negro profundo artístico */
+    color: #f6f1e7;
     text-align: center;
-    padding: 35px 10px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    padding: 40px 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    border-bottom: 4px solid #c8a15d; /* Dorado */
 }
 
 header h1 {
@@ -29,12 +31,13 @@ header h1 {
 }
 
 header p {
-    margin: 8px 0 0;
-    opacity: 0.85;
+    margin-top: 10px;
+    opacity: 0.9;
+    font-size: 18px;
 }
 
 /* ============================================================
-   CONTENIDO
+   CONTENEDOR PRINCIPAL
 ============================================================ */
 main {
     width: min(95%, 1200px);
@@ -44,35 +47,36 @@ main {
 
 section {
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 35px;
-    margin-bottom: 35px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    margin-bottom: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 2px solid #e7dfd1;
 }
 
 section h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: #1c1a18;
-    border-bottom: 2px solid #c8a15d;
+    font-size: 30px;
+    color: #1d1b19;
+    border-bottom: 3px solid #c8a15d;
     padding-bottom: 6px;
     margin-top: 0;
 }
 
 /* ============================================================
-   ENTORNO 3D — SCALE SYSTEM
+   ENTORNO 3D — marco artístico para la sala virtual
 ============================================================ */
-
 #entorno-wrapper {
     position: relative;
     width: 100%;
     height: 80vh;
-    background: #111;
-    border-radius: 10px;
+    background: #0e0e0e;
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    border: 4px solid #c8a15d;
 }
 
-/* Barra de botones */
 #entorno-topbar {
     position: absolute;
     bottom: 12px;
@@ -81,36 +85,34 @@ section h2 {
 }
 
 #entorno-topbar button {
-    background: #ffffffcc;
-    border: none;
-    padding: 6px 10px;
-    font-size: 20px;
+    background: #ffffffdd;
+    border: 2px solid #c8a15d;
+    padding: 8px 12px;
+    font-size: 18px;
     border-radius: 6px;
     cursor: pointer;
     margin-left: 5px;
     transition: background 0.2s ease;
+    font-weight: bold;
 }
 
 #entorno-topbar button:hover {
     background: #ffffff;
 }
 
-/* Escala reducida (60%) */
 #entorno-scaler {
     transform: scale(0.6);
     transform-origin: top left;
-    width: 166%;   /* 1/0.6 ≈ 1.66 */
+    width: 166%;
     height: 166%;
 }
 
-/* Iframe interno */
 #entorno-iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-/* Modo maximizado */
 .maximizado {
     position: fixed !important;
     top: 10px;
@@ -119,7 +121,7 @@ section h2 {
     height: calc(100% - 20px) !important;
     z-index: 10000;
     background: #000;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 .maximizado #entorno-scaler {
@@ -129,21 +131,22 @@ section h2 {
 }
 
 /* ============================================================
-   MENSAJE INICIAL
+   MENSAJE INICIAL — estilo papel pergamino
 ============================================================ */
 #mensaje-inicial {
     text-align: center;
     font-size: 20px;
     font-weight: 600;
-    background: #fff3cd;
-    color: #856404;
+    background: #fff8df;
+    color: #66552d;
     padding: 18px;
-    border-radius: 10px;
-    border: 2px solid #ffeeba;
+    border-radius: 12px;
+    border: 2px solid #e8dbb5;
+    box-shadow: 0 0 12px rgba(0,0,0,0.05);
 }
 
 /* ============================================================
-   MENSAJE DE SONRISA
+   MENSAJE DE SONRISA — verde elegante
 ============================================================ */
 #mensaje-sonrisa {
     position: fixed;
@@ -151,10 +154,10 @@ section h2 {
     left: 50%;
     transform: translateX(-50%);
     background: #27ae60;
-    padding: 14px 30px;
+    padding: 16px 30px;
     color: white;
-    border-radius: 8px;
-    font-size: 19px;
+    border-radius: 10px;
+    font-size: 18px;
     opacity: 0;
     pointer-events: none;
     z-index: 99999;
@@ -166,7 +169,7 @@ section h2 {
 }
 
 /* ============================================================
-   CHATBOT FLOTANTE + BURBUJA
+   CHATBOT flotante — mínimos cambios visuales
 ============================================================ */
 #chatbot-flotante {
     position: fixed;
@@ -181,32 +184,31 @@ section h2 {
 #chatbot-flotante iframe {
     width: 100%;
     height: 100%;
-    border-radius: 12px;
+    border-radius: 14px;
     border: none;
     box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    background: white;
 }
 
 #boton-minimizar {
     position: absolute;
     top: -12px;
     right: -12px;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     background: #ffffff;
     border: 2px solid #c8a15d;
     border-radius: 50%;
     cursor: pointer;
     font-size: 18px;
-    line-height: 24px;
 }
 
-/* Burbuja tipo Messenger */
 #chatbot-burbuja {
     position: fixed;
     bottom: 18px;
     right: 18px;
-    width: 58px;
-    height: 58px;
+    width: 60px;
+    height: 60px;
     background: #c8a15d;
     border-radius: 50%;
     display: none;
@@ -218,7 +220,70 @@ section h2 {
 }
 
 #chatbot-burbuja img {
-    width: 32px;
+    width: 34px;
+}
+
+/* ============================================================
+   SECCIÓN QR — estilo de galería artística
+============================================================ */
+#qr-section {
+    background: #faf6ef;
+    border-radius: 16px;
+    padding: 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    border-left: 6px solid #c8a15d;
+    border-right: 6px solid #c8a15d;
+}
+
+#qr-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 12px;
+    color: #1d1b19;
+}
+
+.qr-desc {
+    text-align: center;
+    font-size: 17px;
+    color: #4a3f35;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.qr-item {
+    text-align: center;
+    max-width: 200px;
+}
+
+.qr-item h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #1d1b19;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+}
+
+.qr-item img {
+    width: 150px;
+    height: 150px;
+    border-radius: 12px;
+    border: 3px solid #c8a15d;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    background: white;
+    transition: transform 0.2s ease;
+}
+
+.qr-item img:hover {
+    transform: scale(1.05);
 }
 
 /* ============================================================
@@ -228,54 +293,9 @@ footer {
     text-align: center;
     padding: 20px;
     background: #1d1b19;
-    color: white;
+    color: #f6f1e7;
     margin-top: 40px;
     font-size: 14px;
-    opacity: 0.85;
-}
-
-/* ============================================================
-   SECCIÓN QR
-============================================================ */
-#qr-section {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 35px;
-    margin-bottom: 35px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-}
-
-#qr-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: #1c1a18;
-    border-bottom: 2px solid #c8a15d;
-    padding-bottom: 6px;
-    margin-top: 0;
-}
-
-.qr-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.qr-item {
-    text-align: center;
-    margin: 15px;
-}
-
-.qr-item h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
-    color: #1c1a18;
-}
-
-.qr-item img {
-    width: 220px;
-    height: auto;
-    border-radius: 10px;
-    border: 4px solid #c8a15d;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0.9;
+    border-top: 4px solid #c8a15d;
 }
